@@ -6,6 +6,7 @@ After installation, execute `bash hdd-arm.sh` on SSH to add the data disk.
 
 This image is not pre-installed with smartmontools
 
+----------------------------------------------------------------------------------------------------------------------
 
 此镜像支持N1和我家云/粒子云，且支持多个数据盘。
 
@@ -15,7 +16,20 @@ This image is not pre-installed with smartmontools
 
 PS：多盘支持目前处于测试阶段
 
+----------------------------------------------------------------------------------------------------------------------
 
-天翼网盘下载地址：
-我家云/粒子云： https://cloud.189.cn/t/BBz6ZfFJri6j  访问码：d78e
-N1： https://cloud.189.cn/t/rauaEnEzU3Ib 访问码：qz3o
+下载地址：
+
+
+我家云/粒子云：
+
+https://cloud.189.cn/t/BBz6ZfFJri6j  访问码：d78e
+
+https://github.com/404404/BonusCloud-Image/releases/download/v1.0-arm/armbian_wjy_Debian_stretch_dual.tar.xz
+
+
+N1： 
+
+https://cloud.189.cn/t/rauaEnEzU3Ib 访问码：qz3o
+
+https://github.com/404404/BonusCloud-Image/releases/download/v1.0-arm/armbian_n1_Debian_stretch_dual_1.0.img.xz
