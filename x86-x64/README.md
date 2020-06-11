@@ -1,6 +1,6 @@
 # BonusCloud_Physical-machine-image
 
-The disk image for running computing tasks and based on Centos 7.6.
+The disk image for running computing tasks and based on Centos 7.6 and Debian 9.
 You can restore this image to any SATA based disks to running the system without using Virtual Machines.
 
 It has already pre-installed smartmontools and NetworkManager.
@@ -12,7 +12,7 @@ PS: Multi-disks support is currently in beta stage.
 For more detail, please refer to https://bonuscloud.club/viewtopic.php?f=52&t=13122&p=38198#p38198
 
 
-此镜像可以用于直接安装与物理机，无需任何虚拟机软件，基于Centos 7.6打造。
+此镜像可以用于直接安装与物理机，无需任何虚拟机软件，基于 Centos 7.6 和 Debian 9 打造。
 
 此镜像已预装smartmontools和NetworkManager
 
