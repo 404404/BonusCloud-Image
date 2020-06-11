@@ -1,4 +1,4 @@
-# BonusCloud-Image
+# BonusCloud-Image for ARMv8
 
 This image supports N1 and our cloud/particle cloud, and supports multiple data disks.
 
