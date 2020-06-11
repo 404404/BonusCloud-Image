@@ -14,3 +14,8 @@ This image is not pre-installed with smartmontools
 此镜像未预装smartmontools
 
 PS：多盘支持目前处于测试阶段
+
+
+天翼网盘下载地址：
+我家云/粒子云： https://cloud.189.cn/t/BBz6ZfFJri6j  访问码：d78e
+N1： https://cloud.189.cn/t/rauaEnEzU3Ib 访问码：qz3o
