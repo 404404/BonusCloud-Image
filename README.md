@@ -1,4 +1,4 @@
-# BonusCloud-Image
+# BonusCloud Image
 
 Here is used to publish some personally made open version images.
 
@@ -6,6 +6,7 @@ Currently includes devices based on the ARMv8 architecture (aarch64, such as N1,
 
 After installation, please change the SSH login password, and read the guide to ensure normal operation.
 
+----------------------------------------------------------------------------------------------------------------------
 
 此处用于发布一些个人制作的开放版镜像
 
