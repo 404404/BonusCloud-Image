@@ -12,7 +12,7 @@ echowarn() {
 
 vgreduce BonusVolGroup --removemissing --force
 
-for sd in $(ls /dev/* | grep -E '((sd)|(vd)|(hd)|(nvme))[a-z]$'); do
+for sd in $(fdisk -l | grep -E 'Disk /dev/((sd)|(vd)|(hd))' | sed 's/Disk //g' | sed 's/\://g' | awk '{print $1}' | sort); do
 	pv_have=$(pvs 2>/dev/null | grep -q "${sd}" ;echo $?)
     vg_have=$(pvs 2>/dev/null | grep "${sd}" | grep -q "BonusVolGroup" ;echo $?)
 
@@ -22,21 +22,21 @@ for sd in $(ls /dev/* | grep -E '((sd)|(vd)|(hd)|(nvme))[a-z]$'); do
 		continue
 	fi
 	#清除磁盘残留信息，防止不能做lvm
-	wipefs -a ${sd}
-	pvcreate ${sd}
-	vgcreate BonusVolGroup ${sd}
-	vgextend BonusVolGroup ${sd}
+	wipefs -a ${sd} 2>/dev/null
+	pvcreate ${sd} 2>/dev/null
+	vgcreate BonusVolGroup ${sd} 2>/dev/null
+	vgextend BonusVolGroup ${sd} 2>/dev/null
 done
 
 echowarn "\nTotal cache space: "
 free_space=$(vgdisplay | grep 'VG Size' | awk '{print $3,$4}' | sed -r 's/\i//g')
 echoinfo "${free_space} \n"
-for sd in $(ls /dev/* | grep -E '((sd)|(vd)|(hd)|(nvme))[a-z]$' | grep -v "$root_disk" ); do
+for sd in $(fdisk -l | grep -E 'Disk /dev/((sd)|(vd)|(hd))' | sed 's/Disk //g' | sed 's/\://g' | awk '{print $1}' | sort); do
 	pv_have=$(pvs 2>/dev/null | grep -q "${sd}" ;echo $?)
     vg_have=$(pvs 2>/dev/null | grep "${sd}" | grep -q "BonusVolGroup" ;echo $?)
-	echoinfo "${sd} "
+	echowarn "${sd} "
 	if [[ ${pv_have} == 0 && ${vg_have} == 0 ]]; then
-	    printf "is already in the VG Group. \n"
+	    echoinfo "is already in the VG Group. \n"
 	else 
 	    echoerr "is not in the VG Group! \n"
 	fi
