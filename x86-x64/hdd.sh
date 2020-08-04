@@ -10,6 +10,8 @@ echowarn() {
     printf "\033[1;33m$1\033[0m"
 }
 
+vgreduce BonusVolGroup --removemissing --force
+
 #获取系统盘符，应对系统盘不是sda的情况
 root_type=$(lsblk -ar 2>>/dev/null | grep -w "/" | awk '{print $(NF-1)}')
 root_name=$(lsblk -ar 2>>/dev/null | grep -w "/" | awk '{print $1}')
@@ -18,18 +20,31 @@ if [[ x"${root_type}" == x"lvm" ]]; then
     root_vg_name=$(echo ${root_name} | awk -F- '{print $1}')
     root_disk=$(pvs 2>>/dev/null | grep "${root_vg_name}" | awk '{print $1}' | sed 's/[0-9]//;s/\/dev\///')
 else
-    root_disk=$(lsblk -ar 2>>/dev/null | grep -w "/" | awk '{print $1}' | sed 's/[0-9]//')
+    disk_type=$(lsblk -ar 2>>/dev/null | grep -w "/" | awk '{print $1}' | grep -q "nvme" ;echo $?)
+    if [[ ${disk_type} == 0 ]]; then 
+        root_disk=$(lsblk -ar 2>>/dev/null | grep -w "/" | awk '{print $1}' | cut -b 1-7)
+    else
+        root_disk=$(lsblk -ar 2>>/dev/null | grep -w "/" | awk '{print $1}' | sed 's/[0-9]//')
+    fi
 fi
 
 if [[ -z "${root_disk}" ]]; then
     echoerr "Can't find the root disk, exit"
     exit 1
-else
-    echoinfo "/dev/${root_disk} "
-	printf "is the root disk."
 fi
 
-for sd in $(ls /dev/* | grep -E '((sd)|(vd)|(hd)|(nvme))[a-z]$' | grep -v "$root_disk" ); do
+roots_disk=$(ls /dev/* | grep "${root_disk}" | sed -n 1p)
+roots_part=$(fdisk -l | grep "${roots_disk}" | grep "LVM" | awk '{print $1}')
+vg_have=$(pvs 2>/dev/null | grep "${roots_disk}" | grep -q "BonusVolGroup" ;echo $?)
+pv_have=$(fdisk -l | grep "${roots_disk}" | grep -q "LVM" ;echo $?)
+echowarn "\nNow Processing / 正在处理： "
+echoinfo "${roots_disk} \n"
+pvcreate ${roots_part}
+vgcreate BonusVolGroup ${roots_part}
+vgextend BonusVolGroup ${roots_part}
+
+
+for sd in $(ls /dev/* | grep -E '((sd[a-z]$)|(vd[a-z]$)|(hd[a-z]$)|(nvme[0-9][a-z][0-9]$))' | grep -v "${root_disk}" | sort); do
 	vg_have=$(pvs 2>/dev/null | grep "${sd}" | grep -q "BonusVolGroup" ;echo $?)
 	echowarn "\nNow Processing / 正在处理： "
 	echoinfo "${sd} \n"
@@ -58,7 +73,16 @@ if [[ ${free_space} > 101 ]]; then
     echowarn "\nTotal cache space / 总可用缓存空间: "
 	echoinfo "${free_space} \n"
 
-	for sd in $(ls /dev/* | grep -E '((sd)|(vd)|(hd)|(nvme))[a-z]$' | grep -v "$root_disk"); do
+	root_pv=$(pvs 2>/dev/null | grep -q "${roots_disk}" ;echo $?)
+	root_vg=$(pvs 2>/dev/null | grep "${roots_disk}" | grep -q "BonusVolGroup" ;echo $?)
+	echowarn "${roots_disk} "
+	if [[ ${root_pv} == 0 && ${root_vg} == 0 ]]; then
+		echoinfo "is already in the VG volume and is the root disk. / 该磁盘已加入VG卷且为系统盘。 \n"
+	else
+	    echoinfo "is the root disk. \n"
+	fi
+
+	for sd in $(ls /dev/* | grep -E '((sd[a-z]$)|(vd[a-z]$)|(hd[a-z]$)|(nvme[0-9][a-z][0-9]$))' | grep -v "${root_disk}" | sort); do
 	    pv_have=$(pvs 2>/dev/null | grep -q "${sd}" ;echo $?)
         vg_have=$(pvs 2>/dev/null | grep "${sd}" | grep -q "BonusVolGroup" ;echo $?)
 	    echowarn "${sd} "
