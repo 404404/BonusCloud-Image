@@ -20,20 +20,12 @@ PS：多盘支持目前处于测试阶段
 
 1.2版更新内容：针对多盘版创建数据盘的脚本进行更新，在硬盘存在VG卷时询问是否需要格式化硬盘。同时修改了逻辑避免在特定环境下磁盘被意外跳过。
 
+1.6版更新内容：同步到官方0.5.0版本，支持内置拨号等功能。
+
 ----------------------------------------------------------------------------------------------------------------------
 
-下载地址：
+更多详情及下载地址，请参考：
 
+我家云/粒子云：https://bonuscloud.club/viewtopic.php?f=54&t=13468
 
-我家云/粒子云：
-
-https://cloud.189.cn/t/NnAvQbYFzQNr （访问码：eir8）
-
-https://github.com/404404/BonusCloud-Image/releases/download/v1.2-arm/armbian_wjy_Debian_stretch_dual_1.2.tar.xz
-
-
-N1： 
-
-https://cloud.189.cn/t/yQRBf2eEzUzq （访问码：p1ma）
-
-https://github.com/404404/BonusCloud-Image/releases/download/v1.2-arm/armbian_n1_Debian_stretch_dual_1.2.img.xz
+N1： https://bonuscloud.club/viewtopic.php?f=48&t=13457&p=42192#p42192
